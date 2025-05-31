@@ -95,6 +95,7 @@ export default function Dashboard() {
     if (session) {
       fetchTransactions();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session, timeRange]);
 
   const handleSubmit = async (e) => {
