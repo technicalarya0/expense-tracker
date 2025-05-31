@@ -70,21 +70,8 @@ export default function Dashboard() {
   });
   const [timeRange, setTimeRange] = useState('week');
   const [loading, setLoading] = useState(true);
-  const [editingId, setEditingId] = useState(null);
   const [editTransaction, setEditTransaction] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/login');
-    }
-  }, [status, router]);
-
-  useEffect(() => {
-    if (session) {
-      fetchTransactions();
-    }
-  }, [session, timeRange]);
 
   const fetchTransactions = async () => {
     try {
@@ -97,6 +84,18 @@ export default function Dashboard() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.push('/login');
+    }
+  }, [status, router]);
+
+  useEffect(() => {
+    if (session) {
+      fetchTransactions();
+    }
+  }, [session, timeRange]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -192,7 +191,6 @@ export default function Dashboard() {
   };
 
   const handleEditClick = (transaction) => {
-    setEditingId(transaction.id);
     setEditTransaction({ ...transaction, id: transaction.id });
     setIsModalOpen(true);
   };
@@ -217,7 +215,6 @@ export default function Dashboard() {
         setTransactions((prev) =>
           prev.map((t) => (t.id === id ? { ...t, ...editTransaction } : t))
         );
-        setEditingId(null);
         setIsModalOpen(false);
         toast.success('Transaction updated successfully!');
       } else {
@@ -230,7 +227,6 @@ export default function Dashboard() {
   };
 
   const handleEditCancel = () => {
-    setEditingId(null);
     setEditTransaction({});
     setIsModalOpen(false);
   };
